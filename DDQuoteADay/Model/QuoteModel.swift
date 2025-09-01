@@ -8,20 +8,20 @@
 import Foundation
 
 struct QuoteModel: Codable {
-    let id, content, author: String
+    let _id, content, author: String
     let tags: [String]
     let authorSlug: String
     let length: Int
     let dateAdded, dateModified: String
 
     enum CodingKeys: String, CodingKey {
-        case id
+        case _id
         case content, author, tags, authorSlug, length, dateAdded, dateModified
     }
     
     static func defaultQuote() -> QuoteModel {
         return QuoteModel(
-            id: "J-47k8g-i",
+            _id: "J-47k8g-i",
             content: "Love is a friendship set to music.",
             author: "Joseph Campbell",
             tags: ["friendship", "love"],

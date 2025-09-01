@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct QuoteView: View {
-    @State private var quote: String = "temporary quote"
+    @StateObject var quoteViewModel: QuoteViewModel = .init()
     
     var body: some View {
         ZStack {
@@ -19,13 +19,13 @@ struct QuoteView: View {
                 
                 Spacer()
                 
-                BigTextView(text: quote)
+                BigTextView(text: quoteViewModel.quoteModel.content)
                 
                 Spacer()
                 
                 BorderedNormalTextView(text: "Tap for Quote")
                     .onTapGesture {
-                        quote = "Life is not about having everything. It's about finding meaning in eveything."
+                        quoteViewModel.getRandomQuote()
                     }
             }
             .padding()
