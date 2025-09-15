@@ -10,39 +10,71 @@ import Foundation
 class QuoteViewModel: ObservableObject {
     @Published var quoteModel: QuoteModel = .defaultQuote()
     
+    // Custom delegate for SSL bypass (debug only, remove for production)
+    class CustomURLSessionDelegate: NSObject, URLSessionDelegate {
+        func urlSession(_ session: URLSession, didReceive challenge: URLAuthenticationChallenge, completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?) -> Void) {
+            completionHandler(.useCredential, URLCredential(trust: challenge.protectionSpace.serverTrust!))
+        }
+    }
+    
     func getRandomQuote() {
-        getQuote(urlString: "https://api.quotable.io/random")
+        print("Fetching new quote...")
+        getQuote(urlString: "http://api.quotable.io/random")
     }
     
     func getQuote(urlString: String) {
-        guard let url = URL(string: urlString) else { return }
+        guard let url = URL(string: urlString) else {
+            print("Invalid URL")
+            return
+        }
         
-        // send get request from quote API
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
         
+        let session = URLSession.shared
+        
         // try to get data and any error information
-        let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
-            let jsonDecoder = JSONDecoder()
-            
+        let task = session.dataTask(with: request) { (data, response, error) in
             // called only if error is not nil
-            if let error = error {
-                print(error)
+            if let error = error as NSError? {
+                print("Error: \(error.localizedDescription)")
+                print("Error Code: \(error.code)")
+                print("Error Domain: \(error.domain)")
+                if let underlyingError = error.userInfo[NSUnderlyingErrorKey] as? NSError {
+                    print("Underlying Error: \(underlyingError.localizedDescription) (Code: \(underlyingError.code))")
+                }
                 return
+            }
+            
+            if let response = response as? HTTPURLResponse {
+                print("HTTP Status Code: \(response.statusCode)")
+                if response.statusCode == 429 {
+                    print("Rate limit exceeded. Please wait and try again.")
+                    return
+                }
             }
             
             guard let data = data else {
-                print("data was nil")
+                print("No data received")
                 return
             }
             
+            print("Raw Data: \(String(data: data, encoding: .utf8) ?? "Unable to decode data")")
+            
+            let jsonDecoder = JSONDecoder()
             do {
                 let newQuoteModel = try jsonDecoder.decode(QuoteModel.self, from: data)
                 
                 DispatchQueue.main.async {
-                    self.quoteModel = newQuoteModel
+                    if self.quoteModel._id != newQuoteModel._id {
+                        print("New quote data: \(data)")
+                        self.quoteModel = newQuoteModel
+                    } else {
+                        print("Same quote received, no update")
+                    }
                 }
             } catch {
+                print("Decoding Error: \(error.localizedDescription)")
                 print(error)
             }
         }

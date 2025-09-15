@@ -25,6 +25,7 @@ struct QuoteView: View {
                 
                 BorderedNormalTextView(text: "Tap for Quote")
                     .onTapGesture {
+                        print("Button tapped")
                         quoteViewModel.getRandomQuote()
                     }
             }
