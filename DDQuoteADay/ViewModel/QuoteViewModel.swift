@@ -10,13 +10,6 @@ import Foundation
 class QuoteViewModel: ObservableObject {
     @Published var quoteModel: QuoteModel = .defaultQuote()
     
-    // Custom delegate for SSL bypass (debug only, remove for production)
-    class CustomURLSessionDelegate: NSObject, URLSessionDelegate {
-        func urlSession(_ session: URLSession, didReceive challenge: URLAuthenticationChallenge, completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?) -> Void) {
-            completionHandler(.useCredential, URLCredential(trust: challenge.protectionSpace.serverTrust!))
-        }
-    }
-    
     func getRandomQuote() {
         print("Fetching new quote...")
         getQuote(urlString: "http://api.quotable.io/random")
@@ -33,9 +26,7 @@ class QuoteViewModel: ObservableObject {
         
         let session = URLSession.shared
         
-        // try to get data and any error information
         let task = session.dataTask(with: request) { (data, response, error) in
-            // called only if error is not nil
             if let error = error as NSError? {
                 print("Error: \(error.localizedDescription)")
                 print("Error Code: \(error.code)")
