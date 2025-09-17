@@ -8,16 +8,27 @@
 		<dict>
 			<key>api.quotable.io</key>
 			<dict>
-				<key>NSIncludesSubdomains</key>
-				<true/>
 				<key>NSExceptionAllowsInsecureHTTPLoads</key>
 				<true/>
-				<key>NSExceptionRequiresForwardSecrecy</key>
-				<false/>
 				<key>NSExceptionMinimumTLSVersion</key>
 				<string>TLSv1.2</string>
+				<key>NSExceptionRequiresForwardSecrecy</key>
+				<false/>
+				<key>NSIncludesSubdomains</key>
+				<true/>
 			</dict>
 		</dict>
 	</dict>
+	<key>UIAppFonts</key>
+	<array>
+		<string>Pacifico-Regular.ttf</string>
+		<string>Sacramento-Regular.ttf</string>
+		<string>Molle-Italic.ttf</string>
+		<string>Limelight-Regular.ttf</string>
+		<string>GreatVibes-Regular.ttf</string>
+		<string>GoblinOne-Regular.ttf</string>
+		<string>DancingScript-VariableFont_wght.ttf</string>
+		<string>ButterflyKids-Regular.ttf</string>
+	</array>
 </dict>
 </plist>
