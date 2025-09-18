@@ -12,7 +12,7 @@ struct SelectFontView: View {
         "Courier New", "Pacifico-Regular", "Molle-Regular", "GreatVibes-Regular", "Sacramento-Regular", "DancingScript-SemiBold", "ButterflyKids-Regular", "GoblinOne", "ChalkboardSE-Bold", "Limelight-Regular", "ShadowsIntoLightTwo-Regular"
     ]
     let text: String
-    @State var chosenFont: String
+    @Binding var chosenFont: String
     let textFontSizeConst: CGFloat = 24
     @State private var color: Color = .blue
     
@@ -45,5 +45,5 @@ struct SelectFontView: View {
 }
 
 #Preview {
-    SelectFontView(text: "Hello", chosenFont: "Courier New")
+    SelectFontView(text: "Hello", chosenFont: .constant("Courier New"))
 }
