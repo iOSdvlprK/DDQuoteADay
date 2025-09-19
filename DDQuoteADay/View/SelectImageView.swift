@@ -20,23 +20,23 @@ struct SelectImageView: View {
             VStack {
                 Spacer()
                 
-                ZStack {
-                    Image(img1)
-                        .resizable()
-                        .scaledToFit()
-                        .clipShape(.rect(cornerRadius: 20))
-                        .overlay {
-                            RoundedRectangle(cornerRadius: 20)
-                                .stroke(Color.white, lineWidth: 3)
-                        }
-                        .padding()
-                    
-                    CustomNormalTextView(
-                        text: quote,
-                        chosenFont: chosenFont,
-                        fontSize: fontSize
+                Image(img1)
+                    .resizable()
+                    .scaledToFit()
+                    .clipShape(.rect(cornerRadius: 20))
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 20)
+                            .stroke(Color.white, lineWidth: 3)
                     )
-                }
+                    .overlay {
+                        CustomNormalTextView(
+                            text: quote,
+                            chosenFont: chosenFont,
+                            fontSize: fontSize
+                        )
+                        .minimumScaleFactor(0.1)
+                    }
+                    .padding()
                 
                 Spacer()
                 
