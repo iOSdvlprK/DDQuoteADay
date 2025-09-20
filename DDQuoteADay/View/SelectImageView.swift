@@ -12,6 +12,8 @@ struct SelectImageView: View {
     let author: String
     var fontSize: CGFloat = 30
     @State private var chosenFont = "Courier New"
+    @State private var textOpacity: CGFloat = 1.0
+    @State private var textScale: CGFloat = 1.0
     
     var body: some View {
         ZStack {
@@ -34,14 +36,44 @@ struct SelectImageView: View {
                             chosenFont: chosenFont,
                             fontSize: fontSize
                         )
+                        .opacity(textOpacity)
+                        .scaleEffect(textScale)
+                        .padding()
                         .minimumScaleFactor(0.1)
                     }
                     .padding()
                 
                 Spacer()
                 
-                SelectFontView(text: "Hello", chosenFont: $chosenFont)
+                VStack(spacing: 30) {
+                    TitledSlider(text: "Scale Text", minValue: 0.1, maxValue: 2.0, step: 0.05, value: $textScale)
+                    
+                    TitledSlider(text: "Text Opacity", minValue: 0.0, maxValue: 1.0, step: 0.02, value: $textOpacity)
+                    
+                    SelectFontView(text: "Hello", chosenFont: $chosenFont)
+                }
+                .padding(.horizontal)
             }
+        }
+    }
+}
+
+struct TitledSlider: View {
+    let text: String
+    let minValue: CGFloat
+    let maxValue: CGFloat
+    let step: CGFloat
+    @Binding var value: CGFloat
+    
+    var body: some View {
+        VStack(alignment: .leading, spacing: 0) {
+            Text(text)
+                .foregroundStyle(.white)
+                .font(.caption)
+                .fontWeight(.bold)
+                .italic()
+            
+            Slider(value: $value, in: minValue ... maxValue, step: step)
         }
     }
 }
